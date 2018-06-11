@@ -87,6 +87,7 @@ public:
         }
 
         //conv1 << pool1 << conv2 << pool2 << fc1 << act1 << fc2 << smx
+	// << = Stream.add_layer
         graph << target_hint
               << fast_math_hint
               << InputLayer(TensorDescriptor(TensorShape(28U, 28U, 1U, batches), DataType::F32), get_input_accessor(""))
@@ -118,6 +119,7 @@ public:
               << SoftmaxLayer().set_name("prob")
               << OutputLayer(get_output_accessor(""));
 
+	// 
         // Finalize graph
         GraphConfig config;
         config.use_tuner = (target == 2);

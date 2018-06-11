@@ -34,6 +34,7 @@ namespace graph
  *
  * @warning Always run as one of the last mutation pass as optimizations might change the parent of sub-tensors.
  **/
+// 서브텐서를 이용하여 depth concatenation 최적화르 위한 경로
 class DepthConcatSubTensorMutator final : public IGraphMutator
 {
 public:

@@ -242,8 +242,11 @@ protected:
     Graph                *_graph;           /**< Backward reference to graph owning the node */
     NodeID                _id;              /**< Node ID */
     NodeParams            _common_params;   /**< Node common params */
+    // 노드의 아웃풋 텐서
     std::vector<TensorID> _outputs;         /**< Output of the node */
+    // 노드의 인풋 간선 
     std::vector<EdgeID>   _input_edges;     /**< Inputs edge set */
+    // 노드의 아웃풋 간선
     std::set<EdgeID>      _output_edges;    /**< Output edge set */
     Target                _assigned_target; /**< Assigned target by the Graph executor */
 };

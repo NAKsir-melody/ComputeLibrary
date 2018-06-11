@@ -34,6 +34,7 @@ namespace graph
  *
  * @warning This is compulsory to run in case Split layers are present in the model
  **/
+// 서브텐서를 이용하여 오퍼레이션을 나누는 최적화를 위한 경로
 class SplitLayerSubTensorMutator final : public IGraphMutator
 {
 public:

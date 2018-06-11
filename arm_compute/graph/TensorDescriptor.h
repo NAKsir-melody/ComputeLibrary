@@ -40,11 +40,13 @@ struct TensorDescriptor final : public misc::ICloneable<TensorDescriptor>
     /** Default Constructor **/
     TensorDescriptor() = default;
     /** Constructor
-     *
+     * 텐서의 모양 x, y, depth, batch
      * @param[in] tensor_shape       Tensor shape
      * @param[in] tensor_data_type   Tensor data type
      * @param[in] tensor_quant_info  Tensor quantization info
+     * 텐서의 shape의 차원
      * @param[in] tensor_data_layout Tensor data layout
+     *
      * @param[in] tensor_target      Target to allocate the tensor for
      */
     TensorDescriptor(TensorShape      tensor_shape,

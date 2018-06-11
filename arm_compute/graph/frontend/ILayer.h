@@ -45,6 +45,7 @@ public:
      *
      * @return ID of the created node.
      */
+    // CreateLayer버추얼 함수는 layer를 스트림에 추가한다 
     virtual NodeID create_layer(IStream &s) = 0;
     /** Sets the name of the layer
      *

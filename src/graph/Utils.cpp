@@ -53,6 +53,7 @@ Target get_default_target()
     ARM_COMPUTE_ERROR("No backend exists!");
 }
 
+// 그래프의 노드/텐서들에게 타겟에 어싸인한다 (for exam. CL)
 void force_target_to_graph(Graph &g, Target target)
 {
     auto &nodes = g.nodes();
@@ -78,6 +79,7 @@ PassManager create_default_pass_manager(Target target)
 {
     PassManager pm;
 
+    //not if GLES compute
     if(target != Target::GC)
     {
         pm.append(support::cpp14::make_unique<InPlaceOperationMutator>());

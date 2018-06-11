@@ -40,6 +40,7 @@ void fuse_batch_norm_with_activation(Graph &g);
 } // namespace detail
 
 /** Mutation pass to fuss nodes */
+// 노드를 fuss하기 위한 변형경로
 class NodeFusionMutator final : public IGraphMutator
 {
 public:

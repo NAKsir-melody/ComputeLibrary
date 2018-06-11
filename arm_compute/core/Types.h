@@ -107,6 +107,9 @@ constexpr float SCALE_PYRAMID_HALF = 0.5f;
 constexpr float SCALE_PYRAMID_ORB = 8.408964152537146130583778358414e-01;
 
 /** Supported tensor data layouts */
+// 텐서의 데이터 구조 설정
+// sample갯수, 채널, 높이, 넓이
+// sample갯수, 높이, 넓이, 채널
 enum class DataLayout
 {
     UNKNOWN, /**< Unknown data layout */

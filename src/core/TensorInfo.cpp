@@ -66,6 +66,7 @@ TensorInfo::TensorInfo(unsigned int width, unsigned int height, Format format)
 {
 }
 
+// Lenet샘플에서 텐서를 생성하기 위해 사용한 함수
 TensorInfo::TensorInfo(const TensorShape &tensor_shape, Format format)
     : TensorInfo()
 {
@@ -128,7 +129,7 @@ void TensorInfo::init(size_t num_channels, DataType data_type, size_t fixed_poin
 {
     init(TensorShape(), num_channels, data_type, fixed_point_position);
 }
-
+// 텐서 초기화 
 void TensorInfo::init(const TensorShape &tensor_shape, size_t num_channels, DataType data_type, int fixed_point_position)
 {
     ARM_COMPUTE_ERROR_ON(num_channels == 0);

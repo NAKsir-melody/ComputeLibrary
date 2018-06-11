@@ -81,6 +81,7 @@ struct GraphConfig
 };
 
 /**< Device target types */
+// 텐서 생성할때 어떤 타입인지 선택한다
 enum class Target
 {
     UNSPECIFIED, /**< Unspecified Target */

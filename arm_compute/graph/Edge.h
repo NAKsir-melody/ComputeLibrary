@@ -48,6 +48,8 @@ public:
      * @param[in] consumer_idx Consumer node input index
      * @param[in] tensor       Tensor associated with the edge
      */
+    // 하나의 에지입장에서 입력노드는 프로듀서 노드이고, 출력노드 컨슈머 노드이다
+    // 그리고 노드의 인덱스는 내가 해당 노드의 몇번째 입/출력에 연결되어 있는지 확인하는 번호이다
     Edge(EdgeID id, INode *producer, unsigned int producer_idx, INode *consumer, unsigned int consumer_idx, Tensor *tensor)
         : _id(id), _producer(producer), _consumer(consumer), _producer_idx(producer_idx), _consumer_idx(consumer_idx), _tensor(tensor)
 
@@ -65,6 +67,7 @@ public:
      *
      * @return Producer node id
      */
+    // 이 에지에 연결된 프로듀서가 누군지 반환한다
     NodeID producer_id() const
     {
         return (_producer == nullptr) ? EmptyNodeID : _producer->id();
@@ -97,6 +100,7 @@ public:
      *
      * @return Producer node output index
      */
+    // 연결된 프로듀서 노드의 아웃풋 번호를 반환
     unsigned int producer_idx() const
     {
         return _producer_idx;

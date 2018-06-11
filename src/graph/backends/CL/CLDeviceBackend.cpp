@@ -125,7 +125,7 @@ IAllocator *CLDeviceBackend::backend_allocator()
 {
     return &_allocator;
 }
-
+// CL backend 의 텐서 handle 생성 함수
 std::unique_ptr<ITensorHandle> CLDeviceBackend::create_tensor(const Tensor &tensor)
 {
     // Get tensor descriptor
@@ -164,6 +164,9 @@ arm_compute::Status CLDeviceBackend::validate_node(INode &node)
     ARM_COMPUTE_LOG_GRAPH_VERBOSE("Validating CL node with ID : " << node.id() << std::endl);
     ARM_COMPUTE_ERROR_ON(node.assigned_target() != Target::CL);
 
+    // 각 노드들이 포함된 레이어의 동작특성에 따라 노드가 제대로 구성되었는지 확인
+    // 풀링은 가능한가
+    // 컨볼루션은 가능한가, 마스크 사이즈는 정확한가
     return CLNodeValidator::validate(&node);
 }
 

@@ -68,10 +68,12 @@ EdgeID Graph::add_connection(NodeID source, size_t source_idx, NodeID sink, size
     ARM_COMPUTE_ERROR_ON((sink >= _nodes.size()) || (_nodes[sink] == nullptr) || (sink_idx >= _nodes[sink]->num_inputs()));
 
     // Get nodes
+    // Node ID를 사용하여 소스와 싱크 INode를 가져온다
     std::unique_ptr<INode> &source_node = _nodes[source];
     std::unique_ptr<INode> &sink_node   = _nodes[sink];
 
     // Check for duplicate connections (Check only sink node)
+    // 중복을 체크하기위해 싱크노드에 인덱스 에지를 삽입해본다
     Edge *sink_node_edge = sink_node->input_edge(sink_idx);
     if((sink_node_edge != nullptr) && (sink_node_edge->producer_id() == source) && (sink_node_edge->producer_idx() == source_idx)
        && (sink_node_edge->consumer_id() == sink) && (sink_node_edge->consumer_idx() == sink_idx))
@@ -80,6 +82,7 @@ EdgeID Graph::add_connection(NodeID source, size_t source_idx, NodeID sink, size
     }
 
     // Check if there is already a tensor associated with output if not create one
+    // 텐서가 이미 존재한다면 재사용, 없으면 새로 텐서를 만든다
     TensorID tid = source_node->output_id(source_idx);
     if(tid == NullTensorID)
     {
@@ -88,18 +91,22 @@ EdgeID Graph::add_connection(NodeID source, size_t source_idx, NodeID sink, size
     std::unique_ptr<Tensor> &tensor = _tensors[tid];
 
     // Create connections
+    // 에지를 생성(연결)하고 저장한다
     EdgeID eid        = _edges.size();
     auto   connection = arm_compute::support::cpp14::make_unique<Edge>(eid, source_node.get(), source_idx, sink_node.get(), sink_idx, tensor.get());
     _edges.push_back(std::move(connection));
 
     // Add connections to source and sink nodes
+    // 해당 에지의 id를 소스와 싱크 노드에 등록한다
     source_node->_output_edges.insert(eid);
     sink_node->_input_edges[sink_idx] = eid;
 
     // Set tensor output node
+    // 소스노드의 아웃풋에 텐서 ID를 등록한다
     source_node->_outputs[source_idx] = tid;
 
     // Bind tensor to the edge
+    // 텐서에 에지아이디를 등록한다
     tensor->bind_edge(eid);
 
     // Try and propagate shapes in sink node

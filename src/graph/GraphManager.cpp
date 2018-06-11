@@ -53,29 +53,39 @@ void GraphManager::finalize_graph(Graph &graph, GraphContext &ctx, PassManager &
     }
 
     // Force target to all graph construct
+    // node & tensor
     Target forced_target = is_target_supported(target) ? target : get_default_target();
     force_target_to_graph(graph, forced_target);
 
     // Configure all tensors
+    // 타겟 백엔드에 텐서를 생성한다
     detail::configure_all_tensors(graph);
 
     // Apply all mutating passes
+    // 모든 변형 경로를 실행한다
     pm.run_all(graph);
 
     // Validate all nodes
+    // 백엔드에게 모든 노드를 하나하나 검증요청한다
     detail::validate_all_nodes(graph);
 
     // Configure all nodes
+    // CL커널이 동작할수 있도록 모든 노드를 준비시킨다
     auto workload = detail::configure_all_nodes(graph, ctx);
     ARM_COMPUTE_ERROR_ON_MSG(workload.tasks.empty(), "Could not configure all nodes!");
 
     // Allocate const tensors and call accessors
+    // clCreateBuffer
     detail::allocate_const_tensors(graph);
+    
+    // enqueueMapBuffer
     detail::call_all_const_node_accessors(graph);
 
     if(forced_target == Target::CL)
     {
         // Prepare graph
+	// 상황에따라 메모리 레이아웃을 변경하거나, 준비커널을 실행해야 하는 경우가 있음 
+	// gemm convolution의 경우 transpose커널을 한번 실행함
         detail::prepare_all_tasks(workload);
     }
 

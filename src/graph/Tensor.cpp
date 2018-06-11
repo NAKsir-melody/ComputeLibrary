@@ -76,6 +76,7 @@ bool Tensor::call_accessor()
     }
 
     // Map tensor
+    // enqueueMapBuffer
     _handle->map(true);
 
     // Return in case of null backend buffer

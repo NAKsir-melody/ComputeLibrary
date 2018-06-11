@@ -32,11 +32,13 @@ namespace graph
 {
 void ExecutionTask::operator()()
 {
+// enqueue(queue, task, slice);
     TaskExecutor::get().execute_function(*this);
 }
 
 void execute_task(ExecutionTask &task)
 {
+// enqueue(queue, task, slice);
     if(task.task)
     {
         task.task->run();

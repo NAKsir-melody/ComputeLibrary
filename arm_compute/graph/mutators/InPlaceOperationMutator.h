@@ -31,6 +31,7 @@ namespace arm_compute
 namespace graph
 {
 /** Mutation pass to optimize operations that can be performed in-place */
+// 제자리에서 수행가능한 동작들을 최적화 하기위한 변형 패스 
 class InPlaceOperationMutator final : public IGraphMutator
 {
 public:

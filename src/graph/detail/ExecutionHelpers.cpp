@@ -48,6 +48,7 @@ void validate_all_nodes(Graph &g)
     auto &nodes = g.nodes();
 
     // Create tasks
+    // 백엔드에게 모든 노드를 하나하나 검증요청한다
     for(auto &node : nodes)
     {
         if(node != nullptr)
@@ -60,7 +61,7 @@ void validate_all_nodes(Graph &g)
         }
     }
 }
-
+// 타겟 백엔드에 텐서를 생성한다
 void configure_all_tensors(Graph &g)
 {
     auto &tensors = g.tensors();
@@ -155,6 +156,7 @@ ExecutionWorkload configure_all_nodes(Graph &g, GraphContext &ctx)
             Target assigned_target = node->assigned_target();
             auto   backend         = backends::BackendRegistry::get().find_backend(assigned_target);
             ARM_COMPUTE_ERROR_ON_MSG(!backend, "Requested backend doesn't exist!");
+	    // CL커널을 준비한다
             auto func = backend->configure_node(*node, ctx);
             if(func != nullptr)
             {
@@ -251,6 +253,8 @@ void call_all_tasks(ExecutionWorkload &workload)
     // Execute tasks
     for(auto &task : workload.tasks)
     {
+	// enqueue(queue, task, slice);
+	// operator overloading ()
         task();
     }
 

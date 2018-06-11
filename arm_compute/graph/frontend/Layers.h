@@ -82,6 +82,7 @@ public:
     NodeID create_layer(IStream &s) override
     {
         NodeParams  common_params = { name(), s.hints().target_hint };
+	// 스트림의 마지막 노드를 인풋으로 설정함
         NodeIdxPair input         = { s.tail_node(), 0 };
         return GraphBuilder::add_output_node(s.graph(), common_params, input, std::move(_accessor));
     }
