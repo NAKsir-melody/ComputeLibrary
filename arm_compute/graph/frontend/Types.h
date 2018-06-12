@@ -59,6 +59,8 @@ enum class BranchMergeMethod
 };
 
 /** Hints that can be passed to the stream to expose parameterization */
+// 스트림으로 전달할수 있는 파라미터 힌트
+// 타겟, 컨볼루션 메소드
 struct StreamHints
 {
     Target                     target_hint                       = { Target::UNSPECIFIED };                 /**< Target execution hint */

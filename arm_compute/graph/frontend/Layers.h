@@ -205,13 +205,13 @@ public:
 private:
     unsigned int           _conv_width;
     unsigned int           _conv_height;
-    unsigned int           _ofm;
-    const PadStrideInfo    _conv_info;
+    unsigned int           _ofm; //depth
+    const PadStrideInfo    _conv_info; // padding, stride
     unsigned int           _num_groups;
     ITensorAccessorUPtr    _weights;
     ITensorAccessorUPtr    _bias;
     const QuantizationInfo _weights_quant_info;
-    const QuantizationInfo _out_quant_info;
+    const QuantizationInfo _out_quant_info; // quantization
 };
 
 /** Depthwise Convolution Layer */

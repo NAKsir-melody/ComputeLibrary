@@ -203,6 +203,14 @@ NodeID GraphBuilder::add_batch_normalization_node(Graph &g, NodeParams params, N
     return batch_norm_nid;
 }
 
+// Graph of Stream
+// Node's Target Hint
+// Node ID, 0
+// conv size
+// depth = 20
+// conv_info = padding ,stride
+// num_of_groups = 1
+//
 NodeID GraphBuilder::add_convolution_node(Graph &g, NodeParams params, NodeIdxPair input,
                                           Size2D kernel_spatial_extend, unsigned int depth, PadStrideInfo conv_info,
                                           unsigned int num_groups, ConvolutionMethod method, FastMathHint fast_math_hint,
@@ -231,6 +239,7 @@ NodeID GraphBuilder::add_convolution_node(Graph &g, NodeParams params, NodeIdxPa
         w_desc.quant_info = weights_quant_info;
     }
 
+    // const_node = 값이 안변하는 노드 (weight, bias)
     NodeID w_nid = add_const_node_with_name(g, params, "Weights", w_desc, std::move(weights_accessor));
 
     // Create bias nodes
@@ -246,6 +255,9 @@ NodeID GraphBuilder::add_convolution_node(Graph &g, NodeParams params, NodeIdxPa
     {
         // Create convolution node and connect
         NodeID conv_nid = g.add_node<ConvolutionLayerNode>(conv_info, method, fast_math_hint, out_quant_info);
+	// 싱크노드의 0번에 인풋노드를 연결
+	// 싱크노드의 1번에 const_weight연결
+	// 싱크노드의 2번에 const_bias연결
         g.add_connection(input.node_id, input.index, conv_nid, 0);
         g.add_connection(w_nid, 0, conv_nid, 1);
         if(has_bias)

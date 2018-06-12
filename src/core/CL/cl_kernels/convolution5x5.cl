@@ -156,6 +156,7 @@ convolution5x1(
  *
  * @return a short8 containing 8 convoluted and scaled values.
  */
+// source image에 5x5를 곱한다
 short8 convolution5x5(
     Image      *src,
     const short mat0, const short mat1, const short mat2, const short mat3, const short mat4,

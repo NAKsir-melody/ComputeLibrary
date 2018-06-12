@@ -156,6 +156,7 @@ enum class MemoryManagerAffinity
  *
  * Used to describe connections
  */
+// 노드 ID 와 인덱스를 사용하여 connection을 표현한다
 struct NodeIdxPair
 {
     NodeID node_id; /**< Node ID */

@@ -218,6 +218,7 @@ std::pair<Status, Window> validate_and_configure_window(ITensorInfo *input, ITen
         }
     }
 
+    // 컨볼루션을 위한 input, weight, output access 윈도우를 만든다, 
     // Create window and update padding
     bool   window_changed = false;
     Window win            = calculate_max_window(*output, Steps(num_elems_written_per_iteration_x, num_elems_written_per_iteration_y));
@@ -371,6 +372,7 @@ Status CLDirectConvolutionLayerKernel::validate(const ITensorInfo *input, const 
     return Status{};
 }
 
+// 컨볼루션 실행
 void CLDirectConvolutionLayerKernel::run(const Window &window, cl::CommandQueue &queue)
 {
     ARM_COMPUTE_ERROR_ON_UNCONFIGURED_KERNEL(this);
