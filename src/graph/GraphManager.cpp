@@ -119,6 +119,7 @@ void GraphManager::finalize_graph(Graph &graph, GraphContext &ctx, PassManager &
 void GraphManager::execute_graph(Graph &graph)
 {
     // Check if graph is finalized
+    ARM_COMPUTE_LOG_GRAPH_VERBOSE("execute graph with ID : " << graph.id().get() << std::endl);
     auto it = _workloads.find(graph.id());
     ARM_COMPUTE_ERROR_ON_MSG(it == std::end(_workloads), "Graph is not registered!");
 

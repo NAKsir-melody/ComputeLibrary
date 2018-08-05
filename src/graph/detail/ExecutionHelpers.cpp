@@ -29,6 +29,11 @@
 #include "arm_compute/graph/Tensor.h"
 #include "arm_compute/graph/backends/BackendRegistry.h"
 
+#include "arm_compute/graph/GraphManager.h"
+
+#include "arm_compute/graph/Logger.h"
+#include "arm_compute/graph/Utils.h"
+
 namespace arm_compute
 {
 namespace graph
@@ -45,6 +50,7 @@ void default_initialize_backends()
 
 void validate_all_nodes(Graph &g)
 {
+    ARM_COMPUTE_LOG_GRAPH_VERBOSE(__func__<<  std::endl);
     auto &nodes = g.nodes();
 
     // Create tasks
@@ -64,6 +70,7 @@ void validate_all_nodes(Graph &g)
 // 타겟 백엔드에 텐서를 생성한다
 void configure_all_tensors(Graph &g)
 {
+    ARM_COMPUTE_LOG_GRAPH_VERBOSE(__func__<<  std::endl);
     auto &tensors = g.tensors();
 
     for(auto &tensor : tensors)
@@ -82,6 +89,7 @@ void configure_all_tensors(Graph &g)
 
 void allocate_all_input_tensors(INode &node)
 {
+    ARM_COMPUTE_LOG_GRAPH_VERBOSE(__func__<<  std::endl);
     for(unsigned int i = 0; i < node.num_inputs(); ++i)
     {
         Tensor *tensor = node.input(i);
@@ -129,6 +137,7 @@ void allocate_const_tensors(Graph &g)
 
 void allocate_all_tensors(Graph &g)
 {
+    ARM_COMPUTE_LOG_GRAPH_VERBOSE(__func__<<  std::endl);
     auto &tensors = g.tensors();
 
     for(auto &tensor : tensors)
@@ -142,6 +151,7 @@ void allocate_all_tensors(Graph &g)
 
 ExecutionWorkload configure_all_nodes(Graph &g, GraphContext &ctx)
 {
+    ARM_COMPUTE_LOG_GRAPH_VERBOSE(__func__<<  std::endl);
     ExecutionWorkload workload;
     workload.graph = &g;
     workload.ctx   = &ctx;
@@ -199,6 +209,7 @@ void release_unused_tensors(Graph &g)
 
 void call_tensor_accessor(Tensor *tensor)
 {
+    ARM_COMPUTE_LOG_GRAPH_VERBOSE(__func__<<  std::endl);
     ARM_COMPUTE_ERROR_ON(!tensor);
     tensor->call_accessor();
 }
@@ -211,6 +222,7 @@ void call_all_const_node_accessors(Graph &g)
     {
         if(node != nullptr && node->type() == NodeType::Const)
         {
+    		ARM_COMPUTE_LOG_GRAPH_VERBOSE(__func__<<  std::endl);
             call_tensor_accessor(node->output(0));
         }
     }
@@ -218,6 +230,7 @@ void call_all_const_node_accessors(Graph &g)
 
 void call_all_input_node_accessors(ExecutionWorkload &workload)
 {
+    ARM_COMPUTE_LOG_GRAPH_VERBOSE(__func__<<  std::endl);
     for(auto &input : workload.inputs)
     {
         if(input != nullptr)
@@ -230,6 +243,7 @@ void call_all_input_node_accessors(ExecutionWorkload &workload)
 void prepare_all_tasks(ExecutionWorkload &workload)
 {
     ARM_COMPUTE_ERROR_ON(workload.graph == nullptr);
+    ARM_COMPUTE_LOG_GRAPH_VERBOSE(__func__<<  std::endl);
     for(auto &task : workload.tasks)
     {
         task.prepare();
@@ -240,6 +254,7 @@ void prepare_all_tasks(ExecutionWorkload &workload)
 void call_all_tasks(ExecutionWorkload &workload)
 {
     ARM_COMPUTE_ERROR_ON(workload.ctx == nullptr);
+    ARM_COMPUTE_LOG_GRAPH_VERBOSE(__func__<<  std::endl);
 
     // Acquire memory for the transition buffers
     for(auto &mm_ctx : workload.ctx->memory_managers())
@@ -255,6 +270,7 @@ void call_all_tasks(ExecutionWorkload &workload)
     {
 	// enqueue(queue, task, slice);
 	// operator overloading ()
+	    std::cout<<task.node->name()<<std::endl;
         task();
     }
 
@@ -270,6 +286,7 @@ void call_all_tasks(ExecutionWorkload &workload)
 
 void call_all_output_node_accessors(ExecutionWorkload &workload)
 {
+    ARM_COMPUTE_LOG_GRAPH_VERBOSE(__func__<<  std::endl);
     for(auto &output : workload.outputs)
     {
         if(output != nullptr)

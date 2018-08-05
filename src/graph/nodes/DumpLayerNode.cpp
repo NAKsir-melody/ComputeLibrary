@@ -21,25 +21,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef __ARM_COMPUTE_GRAPH_NODES_H__
-#define __ARM_COMPUTE_GRAPH_NODES_H__
-
-#include "arm_compute/graph/nodes/ActivationLayerNode.h"
-#include "arm_compute/graph/nodes/BatchNormalizationLayerNode.h"
-#include "arm_compute/graph/nodes/ConstNode.h"
-#include "arm_compute/graph/nodes/ConvolutionLayerNode.h"
-#include "arm_compute/graph/nodes/DepthConcatenateLayerNode.h"
-#include "arm_compute/graph/nodes/DepthwiseConvolutionLayerNode.h"
-#include "arm_compute/graph/nodes/EltwiseLayerNode.h"
-#include "arm_compute/graph/nodes/FlattenLayerNode.h"
-#include "arm_compute/graph/nodes/FullyConnectedLayerNode.h"
-#include "arm_compute/graph/nodes/InputNode.h"
-#include "arm_compute/graph/nodes/NormalizationLayerNode.h"
-#include "arm_compute/graph/nodes/OutputNode.h"
-#include "arm_compute/graph/nodes/PoolingLayerNode.h"
-#include "arm_compute/graph/nodes/ReshapeLayerNode.h"
-#include "arm_compute/graph/nodes/SoftmaxLayerNode.h"
-#include "arm_compute/graph/nodes/SplitLayerNode.h"
 #include "arm_compute/graph/nodes/DumpLayerNode.h"
 
-#endif /* __ARM_COMPUTE_GRAPH_NODES_H__ */
+#include "arm_compute/graph/Graph.h"
+#include "arm_compute/graph/INodeVisitor.h"
+
+namespace arm_compute
+{
+namespace graph
+{
+DumpLayerNode::DumpLayerNode()
+{
+    _input_edges.resize(1, EmptyEdgeID);
+    _outputs.resize(1, NullTensorID);
+}
+
+bool DumpLayerNode::forward_descriptors()
+{
+    if((input_id(0) != NullTensorID) && (output_id(0) != NullTensorID))
+    {
+        Tensor *dst = output(0);
+        ARM_COMPUTE_ERROR_ON(dst == nullptr);
+        dst->desc() = configure_output(0);
+        return true;
+    }
+    return false;
+}
+
+TensorDescriptor DumpLayerNode::configure_output(size_t idx) const
+{
+    ARM_COMPUTE_UNUSED(idx);
+    ARM_COMPUTE_ERROR_ON(idx >= _outputs.size());
+
+    const Tensor *src = input(0);
+    ARM_COMPUTE_ERROR_ON(src == nullptr);
+
+    return src->desc();
+}
+
+NodeType DumpLayerNode::type() const
+{
+    return NodeType::DumpLayer;
+}
+
+void DumpLayerNode::accept(INodeVisitor &v)
+{
+    v.visit(*this);
+}
+} // namespace graph
+} // namespace arm_compute

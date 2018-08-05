@@ -505,6 +505,29 @@ private:
     BranchMergeMethod                       _branch_merge_method;
     std::vector<std::unique_ptr<SubStream>> _sub_streams;
 };
+
+/** Dump Layer */
+class DumpLayer final : public ILayer
+{
+public:
+    /** Construct a pooling layer.
+     *
+     * @param[in] pool_info Pooling information.
+     */
+    DumpLayer()
+    {
+    }
+
+    NodeID create_layer(IStream &s) override
+    {
+        NodeParams  common_params = { name(), s.hints().target_hint };
+        NodeIdxPair input         = { s.tail_node(), 0 };
+        return GraphBuilder::add_dump_node(s.graph(), common_params, input);
+    }
+
+private:
+};
+
 } // namespace frontend
 } // namespace graph
 } // namespace arm_compute

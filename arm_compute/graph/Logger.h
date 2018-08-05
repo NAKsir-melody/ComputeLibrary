@@ -45,7 +45,8 @@
 
 #define ARM_COMPUTE_LOG_GRAPH_VERBOSE(x)       \
     ARM_COMPUTE_CREATE_DEFAULT_GRAPH_LOGGER(); \
-    ARM_COMPUTE_LOG_STREAM("GRAPH", arm_compute::logging::LogLevel::VERBOSE, x)
+    ARM_COMPUTE_LOG_STREAM("GRAPH", arm_compute::logging::LogLevel::INFO, x)
+    //ARM_COMPUTE_LOG_STREAM("GRAPH", arm_compute::logging::LogLevel::VERBOSE, x)
 
 #define ARM_COMPUTE_LOG_GRAPH_INFO(x)          \
     ARM_COMPUTE_CREATE_DEFAULT_GRAPH_LOGGER(); \

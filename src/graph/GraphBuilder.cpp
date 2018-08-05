@@ -146,6 +146,11 @@ NodeID GraphBuilder::add_output_node(Graph &g, NodeParams params, NodeIdxPair in
     return nid;
 }
 
+NodeID GraphBuilder::add_dump_node(Graph &g, NodeParams params, NodeIdxPair input)
+{
+    return create_simple_single_input_output_node<DumpLayerNode>(g, params, input);
+}
+
 NodeID GraphBuilder::add_activation_node(Graph &g, NodeParams params, NodeIdxPair input, ActivationLayerInfo act_info)
 {
     return create_simple_single_input_output_node<ActivationLayerNode>(g, params, input, act_info);
@@ -449,5 +454,6 @@ NodeID GraphBuilder::add_split_node(Graph &g, NodeParams params, NodeIdxPair inp
 {
     return create_simple_single_input_output_node<SplitLayerNode>(g, params, input, num_splits, axis);
 }
+
 } // namespace graph
 } // namespace arm_compute

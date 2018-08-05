@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 ARM Limited.
+ * Copyright (c) 2017 ARM Limited.
  *
  * SPDX-License-Identifier: MIT
  *
@@ -21,25 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef __ARM_COMPUTE_GRAPH_NODES_H__
-#define __ARM_COMPUTE_GRAPH_NODES_H__
+#include "arm_compute/runtime/CL/functions/CLDumpLayer.h"
+#include "arm_compute/core/CL/kernels/CLDumpLayerKernel.h"
 
-#include "arm_compute/graph/nodes/ActivationLayerNode.h"
-#include "arm_compute/graph/nodes/BatchNormalizationLayerNode.h"
-#include "arm_compute/graph/nodes/ConstNode.h"
-#include "arm_compute/graph/nodes/ConvolutionLayerNode.h"
-#include "arm_compute/graph/nodes/DepthConcatenateLayerNode.h"
-#include "arm_compute/graph/nodes/DepthwiseConvolutionLayerNode.h"
-#include "arm_compute/graph/nodes/EltwiseLayerNode.h"
-#include "arm_compute/graph/nodes/FlattenLayerNode.h"
-#include "arm_compute/graph/nodes/FullyConnectedLayerNode.h"
-#include "arm_compute/graph/nodes/InputNode.h"
-#include "arm_compute/graph/nodes/NormalizationLayerNode.h"
-#include "arm_compute/graph/nodes/OutputNode.h"
-#include "arm_compute/graph/nodes/PoolingLayerNode.h"
-#include "arm_compute/graph/nodes/ReshapeLayerNode.h"
-#include "arm_compute/graph/nodes/SoftmaxLayerNode.h"
-#include "arm_compute/graph/nodes/SplitLayerNode.h"
-#include "arm_compute/graph/nodes/DumpLayerNode.h"
+#include "arm_compute/core/Types.h"
+#include "support/ToolchainSupport.h"
 
-#endif /* __ARM_COMPUTE_GRAPH_NODES_H__ */
+using namespace arm_compute;
+
+void CLDumpLayer::configure(ICLTensor *input, ICLTensor *output)
+{
+    auto k = arm_compute::support::cpp14::make_unique<CLDumpLayerKernel>();
+    k->configure(input, output);
+    _kernel = std::move(k);
+}

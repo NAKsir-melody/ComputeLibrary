@@ -387,6 +387,34 @@ std::unique_ptr<IFunction> create_flatten_layer(FlattenLayerNode &node)
     return std::move(func);
 }
 
+std::unique_ptr<IFunction> create_dump_layer(DumpLayerNode &node)
+{
+    ARM_COMPUTE_LOG_GRAPH_VERBOSE(
+        "Creating CL DumpLayer node with ID : " << node.id() << " and Name: " << node.name() << std::endl);
+    ARM_COMPUTE_ERROR_ON(node.num_inputs() != 1);
+    ARM_COMPUTE_ERROR_ON(node.num_outputs() != 1);
+
+    // Extract IO and info
+    ICLTensor *input  = get_backing_tensor(node.input(0));
+    ICLTensor *output = get_backing_tensor(node.output(0));
+
+    // Create and configure function
+    auto func = support::cpp14::make_unique<CLDumpLayer>();
+    func->configure(input, output);
+    ARM_COMPUTE_ERROR_ON(input == nullptr);
+    ARM_COMPUTE_ERROR_ON(output == nullptr);
+
+    // Log info
+    ARM_COMPUTE_LOG_GRAPH_INFO("=========Instantiated CLDumpLayer"
+                               << " Data Type: " << input->info()->data_type()
+                               << " Input shape: " << input->info()->tensor_shape()
+                               << " Output shape: " << output->info()->tensor_shape()
+                               << std::endl);
+
+    return std::move(func);
+}
+
+
 /** Create a backend fully connected layer function
  *
  * @param[in] node Node to create the backend function for
@@ -598,6 +626,8 @@ std::unique_ptr<IFunction> CLFunctionFactory::create(INode *node, GraphContext &
             return create_reshape_layer(*polymorphic_downcast<ReshapeLayerNode *>(node));
         case NodeType::SoftmaxLayer:
             return create_softmax_layer(*polymorphic_downcast<SoftmaxLayerNode *>(node), ctx);
+        case NodeType::DumpLayer:
+            return create_dump_layer(*polymorphic_downcast<DumpLayerNode *>(node));
         default:
             return nullptr;
     }

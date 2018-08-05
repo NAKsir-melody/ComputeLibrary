@@ -246,6 +246,8 @@ public:
      * @return Node ID of the created node, EmptyNodeID in case of error
      */
     static NodeID add_split_node(Graph &g, NodeParams params, NodeIdxPair input, unsigned int num_splits, unsigned int axis = 0);
+
+    static NodeID add_dump_node(Graph &g, NodeParams params, NodeIdxPair input);
 };
 } // namespace graph
 } // namespace arm_compute

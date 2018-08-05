@@ -139,6 +139,7 @@ enum class NodeType
     ScaleLayer,
     SoftmaxLayer,
     SplitLayer,
+    DumpLayer,
 
     Input,
     Output,

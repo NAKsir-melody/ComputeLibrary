@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 ARM Limited.
+ * Copyright (c) 2017 ARM Limited.
  *
  * SPDX-License-Identifier: MIT
  *
@@ -21,25 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef __ARM_COMPUTE_GRAPH_NODES_H__
-#define __ARM_COMPUTE_GRAPH_NODES_H__
+#ifndef __ARM_COMPUTE_CLDUMPLAYERKERNEL_H__
+#define __ARM_COMPUTE_CLDUMPLAYERKERNEL_H__
 
-#include "arm_compute/graph/nodes/ActivationLayerNode.h"
-#include "arm_compute/graph/nodes/BatchNormalizationLayerNode.h"
-#include "arm_compute/graph/nodes/ConstNode.h"
-#include "arm_compute/graph/nodes/ConvolutionLayerNode.h"
-#include "arm_compute/graph/nodes/DepthConcatenateLayerNode.h"
-#include "arm_compute/graph/nodes/DepthwiseConvolutionLayerNode.h"
-#include "arm_compute/graph/nodes/EltwiseLayerNode.h"
-#include "arm_compute/graph/nodes/FlattenLayerNode.h"
-#include "arm_compute/graph/nodes/FullyConnectedLayerNode.h"
-#include "arm_compute/graph/nodes/InputNode.h"
-#include "arm_compute/graph/nodes/NormalizationLayerNode.h"
-#include "arm_compute/graph/nodes/OutputNode.h"
-#include "arm_compute/graph/nodes/PoolingLayerNode.h"
-#include "arm_compute/graph/nodes/ReshapeLayerNode.h"
-#include "arm_compute/graph/nodes/SoftmaxLayerNode.h"
-#include "arm_compute/graph/nodes/SplitLayerNode.h"
-#include "arm_compute/graph/nodes/DumpLayerNode.h"
+#include "arm_compute/core/CL/ICLKernel.h"
+#include "arm_compute/core/Types.h"
 
-#endif /* __ARM_COMPUTE_GRAPH_NODES_H__ */
+namespace arm_compute
+{
+class ICLTensor;
+
+/** Interface for the kernel to perform tensor reshaping */
+class CLDumpLayerKernel : public ICLKernel
+{
+public:
+    /** Default constructor */
+    CLDumpLayerKernel();
+    /** Default destructor */
+    ~CLDumpLayerKernel() = default;
+    /** Set the input and output of the kernel
+     *
+     * @param[in]  input  Source tensor. Data type supported: U8/S8/QS8/QASYMM8/U16/S16/QS16/U32/S32/F16/F32
+     * @param[out] output Destination tensor. Data type supported: Same as @p input
+     */
+    void configure(ICLTensor *input, ICLTensor *output);
+
+    // Inherited methods overridden:
+    void run(const Window &window, cl::CommandQueue &queue) override;
+
+private:
+    ICLTensor 	*_input;  /**< Source tensor */
+    ICLTensor   *_output; /**< Destination tensor */
+};
+} // namespace arm_compute
+#endif /*__ARM_COMPUTE_CLRESHAPELAYERKERNEL_H__ */

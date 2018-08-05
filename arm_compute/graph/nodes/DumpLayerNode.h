@@ -21,25 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef __ARM_COMPUTE_GRAPH_NODES_H__
-#define __ARM_COMPUTE_GRAPH_NODES_H__
+#ifndef __ARM_COMPUTE_GRAPH_DUMP_LAYER_NODE_H__
+#define __ARM_COMPUTE_GRAPH_DUMP_LAYER_NODE_H__
 
-#include "arm_compute/graph/nodes/ActivationLayerNode.h"
-#include "arm_compute/graph/nodes/BatchNormalizationLayerNode.h"
-#include "arm_compute/graph/nodes/ConstNode.h"
-#include "arm_compute/graph/nodes/ConvolutionLayerNode.h"
-#include "arm_compute/graph/nodes/DepthConcatenateLayerNode.h"
-#include "arm_compute/graph/nodes/DepthwiseConvolutionLayerNode.h"
-#include "arm_compute/graph/nodes/EltwiseLayerNode.h"
-#include "arm_compute/graph/nodes/FlattenLayerNode.h"
-#include "arm_compute/graph/nodes/FullyConnectedLayerNode.h"
-#include "arm_compute/graph/nodes/InputNode.h"
-#include "arm_compute/graph/nodes/NormalizationLayerNode.h"
-#include "arm_compute/graph/nodes/OutputNode.h"
-#include "arm_compute/graph/nodes/PoolingLayerNode.h"
-#include "arm_compute/graph/nodes/ReshapeLayerNode.h"
-#include "arm_compute/graph/nodes/SoftmaxLayerNode.h"
-#include "arm_compute/graph/nodes/SplitLayerNode.h"
-#include "arm_compute/graph/nodes/DumpLayerNode.h"
+#include "arm_compute/graph/INode.h"
 
-#endif /* __ARM_COMPUTE_GRAPH_NODES_H__ */
+namespace arm_compute
+{
+namespace graph
+{
+/** Dump Layer node */
+class DumpLayerNode final : public INode
+{
+public:
+    /** Constructor
+     *
+     * @param[in] shape Dumpd tensor shape
+     */
+    DumpLayerNode();
+
+    // Inherited overridden methods:
+    NodeType         type() const override;
+    bool             forward_descriptors() override;
+    TensorDescriptor configure_output(size_t idx) const override;
+    void accept(INodeVisitor &v) override;
+
+private:
+};
+} // namespace graph
+} // namespace arm_compute
+#endif /* __ARM_COMPUTE_GRAPH_DUMP_LAYER_NODE_H__ */

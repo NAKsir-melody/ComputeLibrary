@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 ARM Limited.
+ * Copyright (c) 2017 ARM Limited.
  *
  * SPDX-License-Identifier: MIT
  *
@@ -21,25 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef __ARM_COMPUTE_GRAPH_NODES_H__
-#define __ARM_COMPUTE_GRAPH_NODES_H__
+#ifndef __ARM_COMPUTE_CLDUMPLAYER_H__
+#define __ARM_COMPUTE_CLDUMPLAYER_H__
 
-#include "arm_compute/graph/nodes/ActivationLayerNode.h"
-#include "arm_compute/graph/nodes/BatchNormalizationLayerNode.h"
-#include "arm_compute/graph/nodes/ConstNode.h"
-#include "arm_compute/graph/nodes/ConvolutionLayerNode.h"
-#include "arm_compute/graph/nodes/DepthConcatenateLayerNode.h"
-#include "arm_compute/graph/nodes/DepthwiseConvolutionLayerNode.h"
-#include "arm_compute/graph/nodes/EltwiseLayerNode.h"
-#include "arm_compute/graph/nodes/FlattenLayerNode.h"
-#include "arm_compute/graph/nodes/FullyConnectedLayerNode.h"
-#include "arm_compute/graph/nodes/InputNode.h"
-#include "arm_compute/graph/nodes/NormalizationLayerNode.h"
-#include "arm_compute/graph/nodes/OutputNode.h"
-#include "arm_compute/graph/nodes/PoolingLayerNode.h"
-#include "arm_compute/graph/nodes/ReshapeLayerNode.h"
-#include "arm_compute/graph/nodes/SoftmaxLayerNode.h"
-#include "arm_compute/graph/nodes/SplitLayerNode.h"
-#include "arm_compute/graph/nodes/DumpLayerNode.h"
+#include "arm_compute/core/Types.h"
+#include "arm_compute/runtime/CL/ICLSimpleFunction.h"
 
-#endif /* __ARM_COMPUTE_GRAPH_NODES_H__ */
+namespace arm_compute
+{
+class ICLTensor;
+
+/** Basic function to execute flatten. This function calls the following OpenCL kernel:
+*
+* -# @ref CLIm2ColKernel
+*
+*/
+class CLDumpLayer : public ICLSimpleFunction
+{
+public:
+    /** Initialise the kernel's input and output.
+     *
+     * @param[in]  input  First input tensor to flatten with at least 3 dimensions. The dimensions over the third will be interpreted as batches. Data types supported: QS8/QS16/F16/F32
+     * @param[out] output Output tensor with shape [w*h*d, input_batches] where:
+     *             w = width input tensor, h = height input tensor and d = depth input tensor. Data type supported: same as @p input
+     */
+    void configure(ICLTensor *input, ICLTensor *output);
+};
+} // namespace arm_compute
+
+#endif /* __ARM_COMPUTE_CLDUMPLAYER_H__ */
