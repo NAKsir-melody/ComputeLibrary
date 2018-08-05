@@ -30,6 +30,7 @@
 #include "arm_compute/graph/Utils.h"
 #include "arm_compute/graph/detail/CrossLayerMemoryManagerHelpers.h"
 #include "arm_compute/graph/detail/ExecutionHelpers.h"
+#include "arm_compute/runtime/CL/CLScheduler.h"
 
 namespace arm_compute
 {
@@ -127,7 +128,21 @@ void GraphManager::execute_graph(Graph &graph)
     detail::call_all_input_node_accessors(it->second);
 
     // Run graph
+	auto queue = arm_compute::CLScheduler::get().queue();
+	cl_command_queue_properties props = queue.getInfo<CL_QUEUE_PROPERTIES>();
+	arm_compute::CLScheduler::get().set_queue(cl::CommandQueue(arm_compute::CLScheduler::get().context(), props | CL_QUEUE_PROFILING_ENABLE));
+	cl::Event start, stop;
+	queue.enqueueMarker(&start);
     detail::call_all_tasks(it->second);
+	queue.enqueueMarker(&stop);
+	stop.wait();
+
+	cl_ulong time_start, time_end;
+	double total_time;
+	start.getProfilingInfo(CL_PROFILING_COMMAND_END, &time_start);
+	stop.getProfilingInfo(CL_PROFILING_COMMAND_START, &time_end);
+	total_time = time_end - time_start;
+	std::cout << "cltime" << total_time <<"ns"  <<std::endl;
 
     // Call output accessors
     detail::call_all_output_node_accessors(it->second);

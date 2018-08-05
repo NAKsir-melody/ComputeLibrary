@@ -25,6 +25,7 @@
 #include "support/ToolchainSupport.h"
 #include "utils/GraphUtils.h"
 #include "utils/Utils.h"
+#include "arm_compute/runtime/CL/CLScheduler.h"
 
 #include <cstdlib>
 
@@ -227,6 +228,7 @@ public:
                   PadStrideInfo(1, 1, 1, 1))
               .set_name("conv5_4")
               << ActivationLayer(ActivationLayerInfo(ActivationLayerInfo::ActivationFunction::RELU)).set_name("conv5_4/Relu")
+	      << DumpLayer()
               << PoolingLayer(PoolingLayerInfo(PoolingType::MAX, 2, PadStrideInfo(2, 2, 0, 0))).set_name("pool5")
               // Layer 6
               << FullyConnectedLayer(

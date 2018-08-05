@@ -39,7 +39,7 @@ vars = Variables("scons")
 vars.AddVariables(
     BoolVariable("debug", "Debug", False),
     BoolVariable("asserts", "Enable asserts (this flag is forced to 1 for debug=1)", False),
-    BoolVariable("logging", "Logging (this flag is forced to 1 for debug=1)", False),
+    BoolVariable("logging", "Logging (this flag is forced to 1 for debug=1)", True),
     EnumVariable("arch", "Target Architecture", "armv7a", allowed_values=("armv7a", "arm64-v8a", "arm64-v8.2-a", "x86_32", "x86_64")),
     EnumVariable("os", "Target OS", "linux", allowed_values=("linux", "android", "bare_metal")),
     EnumVariable("build", "Build type", "cross_compile", allowed_values=("native", "cross_compile", "embed_only")),
